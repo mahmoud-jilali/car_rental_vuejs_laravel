@@ -27,6 +27,11 @@ onMounted(async() => {
             <span class="sr-only">Loading...</span>
         </div>
     </template>
+    <template v-else-if="carsStore.cars < 1">
+        <div class="text-center">
+            <p class="my-5 text-2xl text-red-600">Opps!! No Data</p>
+        </div>
+    </template>
     <template v-else>
         <div class="flex mx-20 my-7 gap-24">
             <div v-for="car in carsStore.cars" class="block w-1/3 p-6 mx-auto text-center bg-gray-100 border rounded-md cursor-pointer">
