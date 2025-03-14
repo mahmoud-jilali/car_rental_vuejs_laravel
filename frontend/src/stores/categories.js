@@ -33,5 +33,57 @@ export const useCategoriesStore = defineStore("categories", {
                 this.isLoading = false
             }
         },
+        async addCategory(data) {
+            this.categoryErrors = [];
+            this.isLoading = true;
+            await this.getToken()
+            try {
+                await axios.post('/api/car_category', {
+                    name: data.name,
+                    description: data.description
+                });
+                this.isLoading = false;
+                await this.getCategories()
+            } catch(error) {
+                this.isLoading = false;
+                if(error.response.status === 422){
+                    this.categoryErrors = error.response.data.errors
+                }
+            }
+        },
+        async updateCategory(data) {
+            this.categoryErrors = [];
+            this.isLoading = true;
+            await this.getToken()
+            try {
+                await axios.put(`/api/car_category/${data.id}`, {
+                    name: data.name,
+                    description: data.description
+                });
+                this.isLoading = false;
+                await this.getCategories()
+            } catch(error) {
+                this.isLoading = false;
+                if(error.response.status === 422){
+                    this.categoryErrors = error.response.data.errors
+                }
+            }
+        },
+        async deleteCategory(id) {
+            this.categoryErrors = [];
+            this.isLoading = true;
+            await this.getToken()
+            try {
+                await axios.delete(`/api/car_category/${id}`);
+                this.isLoading = false;
+            } catch(error) {
+                this.isLoading = false;
+                if(error.response.status === 422){
+                    this.categoryErrors = error.response.data.errors
+                }
+            } finally{
+                await this.getCategories()
+            }
+        }
     }
 })

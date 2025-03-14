@@ -28,10 +28,10 @@ const showActions = (row) => {
     <SidebarNav />
     <div class="flex mx-auto justify-between my-14 w-11/12">
         <h3 class="uppercase text-4xl font-bold text-blue-500 md:text-4xl ml-60">Cars</h3>
-        <RouterLink :to="{name: 'CarCreate'}"
+        <button 
             class="text-white bg-blue-500 hover:bg-blue-800 font-medium rounded-lg text-sm py-2 px-4 text-center flex">
             <FontAwesomeIcon icon="plus" class="mr-1 py-1 cursor-pointer text-white" />Add
-        </RouterLink>
+        </button>
     </div>
     <template v-if="carsStore.loading">
         <div role="status">
