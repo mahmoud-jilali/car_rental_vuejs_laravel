@@ -1,7 +1,7 @@
 <script setup>
 
 import { ref } from 'vue';
-import { useCategoriesStore } from '@/stores/categories';
+import { useFuelOptionsStore } from '@/stores/fuelOptions';
 
 const props = defineProps({
   show: Boolean
@@ -10,14 +10,14 @@ const emit = defineEmits(['close', 'saved']);
 
 const name = ref('');
 const description = ref('');
-const categoriesStore = useCategoriesStore();
+const fuelOptionsStore = useFuelOptionsStore();
 
 const closeModal = () => {
   emit('close');
 };
 
-const addCategory = async () => {
-  await categoriesStore.addCategory({ name: name.value, description: description.value });
+const addFuelOption = async () => {
+  await fuelOptionsStore.addFuelOption({ name: name.value, description: description.value });
   name.value = '';
   description.value = '';
   emit('saved');
@@ -32,8 +32,8 @@ const addCategory = async () => {
     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
   >
     <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
-      <h2 class="text-2xl font-bold mb-4">Add New Category</h2>
-      <form @submit.prevent="addCategory">
+      <h2 class="text-2xl font-bold mb-4">Add New Fuel Option</h2>
+      <form @submit.prevent="addFuelOption">
         <div class="mb-4">
           <label class="block text-gray-700">Name</label>
           <input

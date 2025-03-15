@@ -33,5 +33,56 @@ export const useFuelOptionsStore = defineStore("fuelOptions", {
                 this.isLoading = false
             }
         },
+        async addFuelOption(data) {
+            this.fuelOptionErrors = [];
+            this.isLoading = true;
+            await this.getToken()
+            try {
+                await axios.post('/api/fuel_option', {
+                    name: data.name,
+                    description: data.description
+                });
+                this.isLoading = false;
+                await this.getFuelOptions()
+            } catch(error) {
+                this.isLoading = false;
+                if(error.response.status === 422){
+                    this.fuelOptionErrors = error.response.data.errors
+                }
+            }
+        },
+        async updateFuelOption(data) {
+            this.fuelOptionErrors = [];
+            this.isLoading = true;
+            await this.getToken()
+            try {
+                await axios.put(`/api/fuel_option/${data.id}`, {
+                    name: data.name,
+                    description: data.description
+                });
+                this.isLoading = false;
+                await this.getFuelOptions()
+            } catch(error) {
+                this.isLoading = false;
+                if(error.response.status === 422){
+                    this.fuelOptionErrors = error.response.data.errors
+                }
+            }
+        },
+        async deleteFuelOption(id) {
+            this.fuelOptionErrors = [];
+            this.isLoading = true;
+            await this.getToken()
+            try {
+                await axios.delete(`/api/fuel_option/${id}`);
+                this.isLoading = false;
+                await this.getFuelOptions()
+            } catch(error) {
+                this.isLoading = false;
+                if(error.response.status === 422){
+                    this.fuelOptionErrors = error.response.data.errors
+                }
+            }
+        }
     }
 })

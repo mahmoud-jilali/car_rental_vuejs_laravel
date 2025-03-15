@@ -42,7 +42,12 @@ const showActions = (row) => {
             <span class="sr-only">Loading...</span>
         </div>
     </template>
-    <template v-else-if="customersStore.customer">
+    <template v-else-if="customersStore.customer.length === 0">
+        <div class="bg-blue-100 text-md font-semibold w-1/2 p-7 my-10 mx-auto rounded-md">
+            <p>No Data Available</p>
+        </div>
+    </template>
+    <template v-else="customersStore.customer">
         <table class="w-3/4 ml-72 text-sm text-left rtl:text-right text-gray-900 cursor-pointer">
             <thead class="text-xs text-gray-900 border-x uppercase bg-gray-50">
                 <tr>
@@ -95,11 +100,6 @@ const showActions = (row) => {
                 </tr>
             </tbody>
         </table>
-    </template>
-    <template v-else>
-        <div class="bg-blue-100 text-md font-semibold w-1/2 p-7 my-10 mx-auto rounded-md">
-            <p>No Data Available</p>
-        </div>
     </template>
 
     <RouterView />

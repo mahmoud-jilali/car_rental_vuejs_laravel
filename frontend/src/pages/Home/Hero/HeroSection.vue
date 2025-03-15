@@ -5,12 +5,15 @@ import { useLocationsStore } from '@/stores/locations'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faSearch, faCalendarAlt, faLocationDot } from '@fortawesome/free-solid-svg-icons'
+import Datepicker from 'vue3-datepicker'
 
 
 const locationsStore = useLocationsStore()
 library.add(faSearch, faCalendarAlt, faLocationDot)
 
 const dropOffLocation = ref(false)
+const startDate = ref(null)
+const endDate = ref(null)
 
 const showDropOffLocation = () => {
     dropOffLocation.value = !dropOffLocation.value
@@ -26,10 +29,10 @@ const showDropOffLocation = () => {
                 <p class="text-left my-10 text-3xl font-medium text-gray-800 lg:ml-10 lg:mb-8 md:text-3xl">We deliver and pick up your rental car at the address of your choice.</p>
             </div>
             <div class="hidden lg:mt-0 lg:px-10 lg:col-span-5 lg:flex">
-                <div class="mx-10 my-14">
-                    <img src="https://executiveinterventionconsult.com/wp-content/uploads/2020/08/Roadmap-768x492.png" alt="">
+                <div class="mx-7 my-7 z-10">
+                    <img src="https://cdn-icons-png.flaticon.com/256/7891/7891893.png" alt="">
                 </div>
-                <div class="absolute mt-36 ml-44 z-10 sm:h-auto">
+                <div class="absolute mt-32 ml-44 z-10 sm:h-auto">
                     <img src="https://content.avito.ma/autoneuf/images/26/26427637-1307-4a4c-b70b-a96ae0199850?t=model_320_320" alt="">
                 </div>
             </div>
@@ -46,11 +49,11 @@ const showDropOffLocation = () => {
                 </div>
                 <div class="flex items-center ml-7 w-1/6 border-r-2 border-black">
                     <FontAwesomeIcon icon="calendar-alt" class="my-2" />
-                    <input datepicker type="text" class="bg-transparent text-gray-900 text-sm p-2 border-none focus:ring-transparent focus:border-transparent" placeholder="Start date">
+                    <Datepicker v-model="startDate" class="bg-transparent text-gray-900 text-sm p-2 border-none focus:ring-transparent focus:border-transparent" placeholder="Start date" />
                 </div>
                 <div class="flex items-center ml-7 w-1/6">
                     <FontAwesomeIcon icon="calendar-alt" class="my-2" />
-                    <input datepicker type="text" class="bg-transparent text-gray-900 text-sm p-2 border-none focus:ring-transparent focus:border-transparent" placeholder="End date">
+                    <Datepicker v-model="endDate" class="bg-transparent text-gray-900 text-sm p-2 border-none focus:ring-transparent focus:border-transparent" placeholder="End date" />
                 </div>
                 <div class="my-auto py-4 mx-1">
                     <RouterLink :to="{name: ''}" class="text-blue-600 hover:text-blue-800 font-medium text-3xl"><FontAwesomeIcon icon="search" class="px-2"/></RouterLink>
