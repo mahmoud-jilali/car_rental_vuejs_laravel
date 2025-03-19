@@ -54,6 +54,13 @@ class CarController extends Controller
         $validated['car_category_id'] = $carCategory->id;
         $validated['fuel_options_id'] = $carFuel->id;
 
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('Images', 'public');
+            $validated['image'] = basename($imagePath);
+        } else {
+            return response()->json(['error' => 'Image is required'], 400);
+        }
+
         $car = car::create($validated);
 
         $message = ['message' => 'Car has been created successfully'];
@@ -100,6 +107,13 @@ class CarController extends Controller
 
         $validated['car_category_id'] = $carCategory->id;
         $validated['fuel_options_id'] = $carFuel->id;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('Images', 'public');
+            $validated['image'] = basename($imagePath);
+        } else {
+            return response()->json(['error' => 'Image is required'], 400);
+        }
 
         $car->update($validated);
 

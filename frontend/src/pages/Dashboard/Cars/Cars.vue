@@ -6,6 +6,9 @@ import { useCarsStore } from '@/stores/cars'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faPlus, faEllipsisVertical, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import Create from './Create.vue'
+import Update from './Update.vue'
+import Delete from './Delete.vue';
 
 
 library.add(faPlus, faEllipsisVertical, faPenToSquare, faTrashCan)
@@ -16,11 +19,41 @@ onMounted(async () => {
 })
 
 const actions = ref(false)
+const showModal = ref(false)
+const isUpdate = ref(false)
+const isDelete = ref(false)
+const selectedCar = ref(null)
 
 const showActions = (row) => {
-    actions.value = (actions.value === row) ? false : row;
+    actions.value = row;
 }
 
+const hideActions = () => {
+    actions.value = null;
+}
+
+const openModal = (car = null, action = 'create') => {
+    if (action === 'update') {
+        isUpdate.value = true
+        isDelete.value = false
+        selectedCar.value = car
+    } else if (action === 'delete') {
+        isUpdate.value = false
+        isDelete.value = true
+        selectedCar.value = car
+    } else {
+        isUpdate.value = false
+        isDelete.value = false
+        selectedCar.value = null
+    }
+    showModal.value = true
+}
+
+
+const closeModal = async () => {
+    showModal.value = false;
+    await carsStore.getCars()
+}
 </script>
 
 <template>
@@ -28,7 +61,7 @@ const showActions = (row) => {
     <SidebarNav />
     <div class="flex mx-auto justify-between my-14 w-11/12">
         <h3 class="uppercase text-4xl font-bold text-blue-500 md:text-4xl ml-60">Cars</h3>
-        <button 
+        <button @click="openModal()"
             class="text-white bg-blue-500 hover:bg-blue-800 font-medium rounded-lg text-sm py-2 px-4 text-center flex">
             <FontAwesomeIcon icon="plus" class="mr-1 py-1 cursor-pointer text-white" />Add
         </button>
@@ -86,7 +119,8 @@ const showActions = (row) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(car, row) in carsStore.car" class="bg-white border-b border-x">
+                <tr v-for="(car, row) in carsStore.car" class="bg-white border-b border-x"
+                @mouseover="showActions(row)" @mouseleave="hideActions">
                     <th class="px-6 py-4">
                         <img :src="car.image" />
                     </th>
@@ -115,13 +149,12 @@ const showActions = (row) => {
                         <FontAwesomeIcon icon="ellipsis-vertical"
                             class="mx-auto py-4 cursor-pointer hover:text-blue-500" @click="showActions(row)" />
                         <div v-if="actions === row" class="absolute rigth-auto border rounded-lg w-auto mt-8 bg-gray-50">
-                            <p class="p-2 flex hover:bg-gray-200 cursor-pointer">
-                                <FontAwesomeIcon icon="pen-to-square" class="mr-1 py-1 cursor-pointer text-green-500" />
-                                Edit
-                            </p>
-                            <p class="p-2 flex hover:bg-gray-200 cursor-pointer">
+                            <button @click="openModal(car, 'update')" class="p-2 flex hover:bg-gray-200 cursor-pointer">
+                                <FontAwesomeIcon icon="pen-to-square" class="mr-1 py-1 cursor-pointer text-green-500" />Edit
+                            </button>
+                            <button @click="openModal(car, 'delete')" class="p-2 flex hover:bg-gray-200 cursor-pointer">
                                 <FontAwesomeIcon icon="trash-can" class="mr-1 py-1 cursor-pointer text-red-600" />Delete
-                            </p>
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -129,6 +162,8 @@ const showActions = (row) => {
         </table>
     </template>
 
-
+    <Create :show="showModal && !isUpdate && !isDelete" @close="closeModal" @saved="closeModal" />
+    <Update :show="showModal && isUpdate" :car="selectedCar" @close="closeModal" @updated="closeModal" />
+    <Delete :show="showModal && isDelete" :car="selectedCar" @close="closeModal" @deleted="closeModal" />
     <RouterView />
 </template>

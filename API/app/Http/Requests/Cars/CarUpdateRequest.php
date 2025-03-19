@@ -26,7 +26,7 @@ class CarUpdateRequest extends FormRequest
             'registration_number' => 'required|max:100',
             'brand' => 'required|max:50',
             'model' => 'required|max:100',
-            'image' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'mileage'=> 'required',
             'seats' => 'required',
             'gearbox' => 'required|max:25',

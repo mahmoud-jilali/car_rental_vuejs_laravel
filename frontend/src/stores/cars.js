@@ -33,5 +33,44 @@ export const useCarsStore = defineStore("cars", {
                 this.isLoading = false
             }
         },
+        async addCar(car) {
+            this.carErrors = []
+            this.isLoading = true
+            await this.getToken()
+            try {
+                await axios.post('/api/car', car)
+                await this.getCars()
+            } catch(error) {
+                this.carErrors = error.response.data.errors
+            } finally {
+                this.isLoading = false
+            }
+        },
+        async updateCar(id, data) {
+            this.carErrors = []
+            this.isLoading = true
+            await this.getToken()
+            try {
+                await axios.put(`/api/car/${id}`, data)
+                await this.getCars()
+            } catch(error) {
+                this.carErrors = error.response.data.errors
+            } finally {
+                this.isLoading = false
+            }
+        },
+        async deleteCar(id) {
+            this.carErrors = []
+            this.isLoading = true
+            await this.getToken()
+            try {
+                await axios.delete(`/api/car/${id}`)
+                await this.getCars()
+            } catch(error) {
+                this.carErrors = error.response.data.errors
+            } finally {
+                this.isLoading = false
+            }
+        }
     }
 })

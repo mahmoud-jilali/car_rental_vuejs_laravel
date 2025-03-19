@@ -33,5 +33,59 @@ export const useInsurancesStore = defineStore("insurances", {
                 this.isLoading = false
             }
         },
+        async addInsurance(data) {
+            this.insuranceErrors = [];
+            this.isLoading = true;
+            await this.getToken()
+            try {
+                await axios.post('/api/insurance', {
+                    name: data.name,
+                    cost: data.cost,
+                    description: data.description,
+                });
+                this.isLoading = false;
+                await this.getInsurances()
+            } catch(error) {
+                this.isLoading = false;
+                if(error.response.status === 422){
+                    this.insuranceErrors = error.response.data.errors
+                }
+            }
+        },
+        async updateInsurance(data) {
+            this.insuranceErrors = [];
+            this.isLoading = true;
+            await this.getToken()
+            try {
+                await axios.put(`/api/insurance/${data.id}`, {
+                    name: data.name,
+                    cost: data.cost,
+                    description: data.description,
+                });
+                this.isLoading = false;
+                await this.getInsurances()
+            } catch(error) {
+                this.isLoading = false;
+                if(error.response.status === 422){
+                    this.insuranceErrors = error.response.data.errors
+                }
+            }
+        },
+        async deleteInsurance(id) {
+            this.insuranceErrors = [];
+            this.isLoading = true;
+            await this.getToken()
+            try {
+                await axios.delete(`/api/insurance/${id}`);
+                this.isLoading = false;
+            } catch(error) {
+                this.isLoading = false;
+                if(error.response.status === 422){
+                    this.insuranceErrors = error.response.data.errors
+                }
+            } finally{
+                await this.getInsurances()
+            }
+        },
     }
 })

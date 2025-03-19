@@ -6,6 +6,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faPlus, faEllipsisVertical, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import SidebarNav from '@/components/SidebarNav/SidebarNav.vue'
+import Create from './Create.vue'
+import Update from './Update.vue'
+import Delete from './Delete.vue'
 
 library.add(faPlus, faEllipsisVertical, faPenToSquare, faTrashCan)
 const locationsStore = useLocationsStore()
@@ -15,9 +18,39 @@ onMounted(async() => {
 })
 
 const actions = ref(false)
+const showModal = ref(false)
+const isUpdate = ref(false)
+const isDelete = ref(false)
+const selectedLocation = ref(null)
 
 const showActions = (row) => {
-    actions.value = (actions.value === row) ? false : row;
+    actions.value = row;
+}
+
+const hideActions = () => {
+    actions.value = null;
+}
+
+const openModal = (location = null, action = 'create') => {
+    if (action === 'update') {
+        isUpdate.value = true;
+        isDelete.value = false;
+        selectedLocation.value = location;
+    } else if (action === 'delete') {
+        isUpdate.value = false;
+        isDelete.value = true;
+        selectedLocation.value = location;
+    } else {
+        isUpdate.value = false;
+        isDelete.value = false;
+        selectedLocation.value = null;
+    }
+    showModal.value = true;
+}
+
+const closeModal = async () => {
+    showModal.value = false;
+    await locationsStore.getLocations()
 }
 
 </script>
@@ -26,7 +59,7 @@ const showActions = (row) => {
     <SidebarNav />
     <div class="flex mx-auto justify-between my-14 w-11/12">
         <h3 class="uppercase text-4xl font-bold text-blue-500 md:text-4xl ml-60">Locations</h3>
-        <button 
+        <button @click="openModal()"
             class="text-white bg-blue-500 hover:bg-blue-800 font-medium rounded-lg text-sm py-2 px-4 text-center flex">
             <FontAwesomeIcon icon="plus" class="mr-1 py-1 cursor-pointer text-white" />Add
         </button>
@@ -55,7 +88,7 @@ const showActions = (row) => {
             <thead class="text-xs text-gray-900 border-x uppercase bg-gray-50">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Street adress
+                        Country
                     </th>
                     <th scope="col" class="px-6 py-3">
                         City
@@ -64,10 +97,10 @@ const showActions = (row) => {
                         State
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Country
+                        Zip code
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Zip code
+                        Street Adress
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Actions
@@ -75,9 +108,10 @@ const showActions = (row) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(location, row) in locationsStore.location" class="bg-white border-b border-x">
+                <tr v-for="(location, row) in locationsStore.location" class="bg-white border-b border-x"
+                @mouseover="showActions(row)" @mouseleave="hideActions">
                     <td class="px-6 py-4">
-                        {{ location.street_adress }}
+                        {{ location.country }}
                     </td>
                     <td class="px-6 py-4">
                         {{ location.city }}
@@ -86,21 +120,21 @@ const showActions = (row) => {
                         {{ location.state }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ location.country }}
+                        {{ location.zip_code }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ location.zip_code }}
+                        {{ location.street_adress }}
                     </td>
                     <td class="px-6 py-4 flex">
                         <FontAwesomeIcon icon="ellipsis-vertical"
                             class="mr-auto py-4 cursor-pointer hover:text-blue-500" @click="showActions(row)" />
                         <div v-if="actions === row" class="absolute rigth-auto border rounded-lg w-auto mt-8 bg-gray-50">
-                            <p class="p-2 flex hover:bg-gray-200 cursor-pointer">
+                            <button @click="openModal(location, 'update')" class="p-2 flex hover:bg-gray-200 cursor-pointer">
                                 <FontAwesomeIcon icon="pen-to-square" class="mr-1 py-1 cursor-pointer text-green-500" />Edit
-                            </p>
-                            <p class="p-2 flex hover:bg-gray-200 cursor-pointer">
+                            </button>
+                            <button @click="openModal(location, 'delete')" class="p-2 flex hover:bg-gray-200 cursor-pointer">
                                 <FontAwesomeIcon icon="trash-can" class="mr-1 py-1 cursor-pointer text-red-600" />Delete
-                            </p>
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -108,6 +142,9 @@ const showActions = (row) => {
         </table>
     </template>
 
+    <Create :show="showModal && !isUpdate && !isDelete" @close="closeModal" @saved="closeModal" />
+    <Update :show="showModal && isUpdate" :location="selectedLocation" @close="closeModal" @updated="closeModal" />
+    <Delete :show="showModal && isDelete" :location="selectedLocation" @close="closeModal" @deleted="closeModal" />
 
     <RouterView />
 </template>

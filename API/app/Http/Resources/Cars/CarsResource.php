@@ -25,7 +25,7 @@ class CarsResource extends JsonResource
             'registration_number' => $this->registration_number,
             'brand' => $this->brand,
             'model' => $this->model,
-            'image' => asset('Images/'. $this->image),
+            'image' => $this-> image ? asset('storage/Images/'. $this->image): null,
             'mileage' => $this->mileage,
             'seats' => $this->seats,
             'gearbox' => $this->gearbox,
