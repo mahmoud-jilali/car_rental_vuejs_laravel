@@ -26,4 +26,5 @@ Route::apiResource('/rental', RentalController::class);
 Route::get('/old_rentals', [RentalController::class, 'getOldRentals'])->middleware('auth');
 Route::get('/current_rentals', [RentalController::class, 'getCurrentRentals'])->middleware('auth');
 Route::get('/new_rentals', [RentalController::class, 'getNewRentals'])->middleware('auth');
-Route::get('/search_location', [LocationController::class, 'getSearchedLocation']);
+Route::get('/searched_pickup_location', [LocationController::class, 'getSearchedPickUpLocation']);
+Route::get('/searched_dropoff_location', [LocationController::class, 'getSearchedDropOffLocation']);

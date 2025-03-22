@@ -11,25 +11,11 @@ use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return new LocationsCollection(location::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    // public function create()
-    // {
-    //     //
-    // }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(LocationStoreRequest $request)
     {
         $validated = $request->validated();
@@ -41,25 +27,11 @@ class LocationController extends Controller
         return response()->json($message + ['location' => new LocationsResource($location)]);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(location $location)
     {
         return new LocationsResource($location);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    // public function edit(location $location)
-    // {
-    //     //
-    // }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(LocationUpdateRequest $request, location $location)
     {
         $validated = $request->validated();
@@ -71,9 +43,6 @@ class LocationController extends Controller
         return response()->json($message + ['location' => new LocationsResource($location)]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(location $location)
     {
         $location->delete();
@@ -81,7 +50,7 @@ class LocationController extends Controller
         return $msg;
     }
 
-    public function getSearchedLocation(Request $request) 
+    public function getSearchedPickUpLocation(Request $request) 
     {
         $query = location::query();
 
@@ -89,11 +58,25 @@ class LocationController extends Controller
 
         if($keyword) {
             $query->where('street_adress', 'like', $keyword . '%');
-            // $query->where('city', 'like', $keyword . '%');
         }
 
         $location = $query->get();
 
-        return response()->json($location);
+        return response()->json(['locations' => $location]);
+    }
+
+    public function getSearchedDropOffLocation(Request $request) 
+    {
+        $query = location::query();
+
+        $keyword = $request->input('keyword');
+
+        if($keyword) {
+            $query->where('street_adress', 'like', $keyword . '%');
+        }
+
+        $location = $query->get();
+
+        return response()->json(['locations' => $location]);
     }
 }

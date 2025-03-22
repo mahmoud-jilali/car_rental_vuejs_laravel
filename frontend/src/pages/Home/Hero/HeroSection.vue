@@ -1,22 +1,61 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useLocationsStore } from '@/stores/locations'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faSearch, faCalendarAlt, faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import Datepicker from 'vue3-datepicker'
+import PickUpLocationDropdown from './SearchedLocation/PickUpLocationDropdown.vue'
+import DropOffLocationDropdown from './SearchedLocation/DropOffLocationDropdown.vue'
 
 
 const locationsStore = useLocationsStore()
 library.add(faSearch, faCalendarAlt, faLocationDot)
 
-const dropOffLocation = ref(false)
+const dropOffLocationInput = ref(false)
 const startDate = ref(null)
 const endDate = ref(null)
+const showPickupDropdown = ref(false)
+const showDropoffDropdown = ref(false)
+const pickupLocation = ref('')
+const dropoffLocation = ref('')
 
 const showDropOffLocation = () => {
-    dropOffLocation.value = !dropOffLocation.value
+    dropOffLocationInput.value = !dropOffLocationInput.value
+}
+
+const searchPickUpLocation = async (event) => {
+    const keyword = event.target.value
+    locationsStore.getPickUpSearchedLocation(keyword)
+    showPickupDropdown.value = true
+}
+
+const searchDropOffLocation = async (event) => {
+    const keyword = event.target.value
+    locationsStore.getDropOffSearchedLocation(keyword)
+    showDropoffDropdown.value = true
+}
+
+watch(() => locationsStore.locations, (locations) => {
+    if (locations && locations.length === 0) {
+        showPickupDropdown.value = false
+        showDropoffDropdown.value = false
+    }
+})
+
+const handlePickUpLocationSelected = (location) => {
+     if(pickupLocation.value) {
+        pickupLocation.value = `${location.street_adress}, ${location.city}`
+    }
+    showPickupDropdown.value = false;
+}
+
+const handleDropOffLocationSelected = (location) => {
+     if(dropoffLocation.value) {
+        dropoffLocation.value = `${location.street_adress}, ${location.city}`
+    }
+    showDropoffDropdown.value = false;
 }
 
 </script>
@@ -41,11 +80,17 @@ const showDropOffLocation = () => {
             <div class="flex md:grid-cols-5 bg-blue-100 border mx-auto items-center w-5/6 my-1 rounded-full">
                 <div class="flex items-center ml-7 w-full border-r-2 border-black">
                     <FontAwesomeIcon icon="location-dot" class="my-2" />
-                    <input type="text" class="bg-transparent text-gray-900 text-sm p-2 border-none focus:ring-transparent focus:border-transparent" placeholder="Pick-Up location" />
+                    <input @input="searchPickUpLocation" v-model="pickupLocation"
+                    type="text" class="bg-transparent text-gray-900 text-sm p-2 border-none focus:ring-transparent focus:border-transparent" placeholder="Pick-Up location" />
+                    <PickUpLocationDropdown v-if="showPickupDropdown" :locations="locationsStore.locations"
+                    @pickup-location-selected="handlePickUpLocationSelected" class="mt-28"/>
                 </div>
-                <div v-if="dropOffLocation" class="flex items-center ml-7 w-full border-r-2 border-black">
+                <div v-if="dropOffLocationInput" class="flex items-center ml-7 w-full border-r-2 border-black">
                     <FontAwesomeIcon icon="location-dot" class="my-2" />
-                    <input type="text" class="bg-transparent text-gray-900 text-sm p-2 border-none focus:ring-transparent focus:border-transparent" placeholder="Drop-Off location" />
+                    <input @input="searchDropOffLocation" v-model="dropoffLocation"
+                    type="text" class="bg-transparent text-gray-900 text-sm p-2 border-none focus:ring-transparent focus:border-transparent" placeholder="Drop-Off location" />
+                    <DropOffLocationDropdown v-if="showDropoffDropdown" :locations="locationsStore.locations"
+                    @dropoff-location-selected="handleDropOffLocationSelected" class="mt-28"/>
                 </div>
                 <div class="flex items-center ml-7 w-1/6 border-r-2 border-black">
                     <FontAwesomeIcon icon="calendar-alt" class="my-2" />
@@ -66,5 +111,6 @@ const showDropOffLocation = () => {
             </label>
         </form>
     </section>
+    <!-- <LocationsDropdown v-if="showDropoffDropdown  && (pickupLocation || dropoffLocation) " :locations="locationsStore.locations"/> -->
     <RouterView />
 </template>

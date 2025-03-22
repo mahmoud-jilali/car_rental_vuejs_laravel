@@ -37,7 +37,7 @@ const handleImageChange = (event) => {
 
 const updateCar = async () => {
    const carData = new FormData();
-   carData.append('id', car.value.id);
+    carData.append('id', car.value.id);
     carData.append('car_category_id', car.value.car_category_id);
     carData.append('registration_number', car.value.registration_number);
     carData.append('brand', car.value.brand);
@@ -50,13 +50,17 @@ const updateCar = async () => {
     carData.append('is_available', car.value.is_available);
     carData.append('description', car.value.description);
 
-    if (car.value.image instanceof File) {
+    if (car.value.image) {
         carData.append('image', car.value.image);
     }
-
-    await carsStore.updateCar(car.value.id, carData);
-    emit('updated')
-    emit('close')
+    
+    try {
+        const response = await carsStore.updateCar(car.value.id, car.value);
+        emit('updated');
+        emit('close');
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 </script>
@@ -88,7 +92,7 @@ const updateCar = async () => {
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Image</label>
-                    <input v-on:change="handleImageChange" type="file" class="w-full p-1 border border-gray-300 rounded mt-1" required/>
+                    <input v-on:change="handleImageChange" type="file" class="w-full p-1 border border-gray-300 rounded mt-1" />
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700">Mileage</label>

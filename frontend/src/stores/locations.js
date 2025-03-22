@@ -91,17 +91,33 @@ export const useLocationsStore = defineStore("locations", {
                 await this.getLocations()
             }
         },
-        async getSearchLocation() {
+        async getPickUpSearchedLocation(keyword) {
             this.locationErrors = []
             this.isLoading = true
             try {
-                const res = await axios.get('/api/search_location')
+                const res = await axios.get(`/api/searched_pickup_location?keyword=${keyword}`)
                 this.locations = res.data.locations
                 this.isLoading = false
             } catch(error) {
                 if(error.response.status === 404) {
                     this.locationErrors = error.response.data.message
-                    this.locations = null
+                    this.locations = []
+                }
+            } finally {
+                this.isLoading = false
+            }
+        },
+        async getDropOffSearchedLocation(keyword) {
+            this.locationErrors = []
+            this.isLoading = true
+            try {
+                const res = await axios.get(`/api/searched_dropoff_location?keyword=${keyword}`)
+                this.locations = res.data.locations
+                this.isLoading = false
+            } catch(error) {
+                if(error.response.status === 404) {
+                    this.locationErrors = error.response.data.message
+                    this.locations = []
                 }
             } finally {
                 this.isLoading = false
