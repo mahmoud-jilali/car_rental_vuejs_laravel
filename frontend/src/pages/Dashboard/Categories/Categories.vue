@@ -107,10 +107,10 @@ const closeModal = async () => {
                         <FontAwesomeIcon icon="ellipsis-vertical"
                             class="mr-auto py-4 cursor-pointer hover:text-blue-500" @click="showActions(row)"/>
                         <div v-if="actions === row" class="absolute rigth-auto border rounded-lg w-auto mt-8 bg-gray-50">
-                            <button @click="openModal(category, 'update')" class="p-2 flex hover:bg-gray-200 cursor-pointer">
+                            <button @click="openModal(category, 'update')" class="p-2 flex hover:bg-gray-200 cursor-pointer w-full">
                                 <FontAwesomeIcon icon="pen-to-square" class="mr-1 py-1 cursor-pointer text-green-500" />Edit
                             </button>
-                            <button @click="openModal(category, 'delete')" class="p-2 flex hover:bg-gray-200 cursor-pointer">
+                            <button @click="openModal(category, 'delete')" class="p-2 flex hover:bg-gray-200 cursor-pointer w-full">
                                 <FontAwesomeIcon icon="trash-can" class="mr-1 py-1 cursor-pointer text-red-600" />Delete
                             </button>
                         </div>

@@ -5,13 +5,14 @@ import SidebarNav from '@/components/SidebarNav/SidebarNav.vue'
 import { useCarsStore } from '@/stores/cars'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faPlus, faEllipsisVertical, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faEllipsisVertical, faPenToSquare, faTrashCan, faEye } from '@fortawesome/free-solid-svg-icons'
+import Car from './Car.vue'
 import Create from './Create.vue'
 import Update from './Update.vue'
-import Delete from './Delete.vue';
+import Delete from './Delete.vue'
 
 
-library.add(faPlus, faEllipsisVertical, faPenToSquare, faTrashCan)
+library.add(faPlus, faEllipsisVertical, faPenToSquare, faTrashCan, faEye)
 const carsStore = useCarsStore()
 
 onMounted(async () => {
@@ -20,6 +21,7 @@ onMounted(async () => {
 
 const actions = ref(false)
 const showModal = ref(false)
+const showCar = ref(false)
 const isUpdate = ref(false)
 const isDelete = ref(false)
 const selectedCar = ref(null)
@@ -33,15 +35,23 @@ const hideActions = () => {
 }
 
 const openModal = (car = null, action = 'create') => {
-    if (action === 'update') {
+    if (action === 'view') {
+        showCar.value = true
+        isUpdate.value = false
+        isDelete.value = false
+        selectedCar.value = car
+    } else if (action === 'update') {
+        showCar.value = false
         isUpdate.value = true
         isDelete.value = false
         selectedCar.value = car
     } else if (action === 'delete') {
+        showCar.value = false
         isUpdate.value = false
         isDelete.value = true
         selectedCar.value = car
     } else {
+        showCar.value = false
         isUpdate.value = false
         isDelete.value = false
         selectedCar.value = null
@@ -119,7 +129,7 @@ const closeModal = async () => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(car, row) in carsStore.car" class="bg-white border-b border-x"
+                <tr v-for="(car, row) in carsStore.car" :key="car.id" class="bg-white border-b border-x"
                 @mouseover="showActions(row)" @mouseleave="hideActions">
                     <th class="px-6 py-4">
                         <img :src="car.image" />
@@ -149,10 +159,13 @@ const closeModal = async () => {
                         <FontAwesomeIcon icon="ellipsis-vertical"
                             class="mx-auto py-4 cursor-pointer hover:text-blue-500" @click="showActions(row)" />
                         <div v-if="actions === row" class="absolute rigth-auto border rounded-lg w-auto mt-8 bg-gray-50">
-                            <button @click="openModal(car, 'update')" class="p-2 flex hover:bg-gray-200 cursor-pointer">
+                            <button @click="openModal(car, 'view')" class="p-2 flex hover:bg-gray-200 cursor-pointer w-full">
+                                <FontAwesomeIcon icon="eye" class="mr-1 py-1 cursor-pointer text-gray-500" />View
+                            </button>
+                            <button @click="openModal(car, 'update')" class="p-2 flex hover:bg-gray-200 cursor-pointer w-full">
                                 <FontAwesomeIcon icon="pen-to-square" class="mr-1 py-1 cursor-pointer text-green-500" />Edit
                             </button>
-                            <button @click="openModal(car, 'delete')" class="p-2 flex hover:bg-gray-200 cursor-pointer">
+                            <button @click="openModal(car, 'delete')" class="p-2 flex hover:bg-gray-200 cursor-pointer w-full">
                                 <FontAwesomeIcon icon="trash-can" class="mr-1 py-1 cursor-pointer text-red-600" />Delete
                             </button>
                         </div>
@@ -162,7 +175,8 @@ const closeModal = async () => {
         </table>
     </template>
 
-    <Create :show="showModal && !isUpdate && !isDelete" @close="closeModal" @saved="closeModal" />
+    <Car :show="showModal && showCar" :car="selectedCar" @close="closeModal" @view="closeModal" />
+    <Create :show="showModal && !showCar && !isUpdate && !isDelete" @close="closeModal" @saved="closeModal" />
     <Update :show="showModal && isUpdate" :car="selectedCar" @close="closeModal" @updated="closeModal" />
     <Delete :show="showModal && isDelete" :car="selectedCar" @close="closeModal" @deleted="closeModal" />
     <RouterView />

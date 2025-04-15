@@ -14,25 +14,11 @@ use Illuminate\Support\Facades\DB;
 
 class CarController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return new CarsCollection(car::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    // public function create()
-    // {
-    //     //
-    // }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(CarStoreRequest $request)
     {
         $validated = $request->validated();
@@ -68,25 +54,11 @@ class CarController extends Controller
         return response()->json($message + ['car' => new CarsResource($car)]);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(car $car)
     {
         return new CarsResource($car);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    // public function edit(car $car)
-    // {
-    //     //
-    // }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(CarUpdateRequest $request, car $car)
     {
         $validated = $request->validated();

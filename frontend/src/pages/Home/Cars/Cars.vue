@@ -60,9 +60,6 @@ onMounted(async() => {
                 </div>
             </div>
         </div>
-        <!-- <div class="block max-w-sm mx-auto text-center">
-            <RouterLink  :to="{name: 'services'}" class="text-white bg-black hover:bg-white hover:text-black hover:border border-black font-medium rounded-lg text-lg px-4 py-2 text-center">Learn more</RouterLink>
-        </div> -->
     </template>
 
     <RouterView />
