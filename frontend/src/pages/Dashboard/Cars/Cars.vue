@@ -132,7 +132,7 @@ const closeModal = async () => {
                 <tr v-for="(car, row) in carsStore.car" :key="car.id" class="bg-white border-b border-x"
                 @mouseover="showActions(row)" @mouseleave="hideActions">
                     <th class="px-6 py-4">
-                        <img :src="car.image" />
+                        <img :src="car.image" class="h-[75px] w-[75px] my-3 mx-auto" />
                     </th>
                     <td class="px-6 py-4">
                         {{ car.category.name }}
@@ -155,7 +155,7 @@ const closeModal = async () => {
                     <td class="px-6 py-4">
                         {{ car.is_available }}
                     </td>
-                    <td class="px-6 py-4 flex">
+                    <td class="px-6 py-4 flex"> 
                         <FontAwesomeIcon icon="ellipsis-vertical"
                             class="mx-auto py-4 cursor-pointer hover:text-blue-500" @click="showActions(row)" />
                         <div v-if="actions === row" class="absolute rigth-auto border rounded-lg w-auto mt-8 bg-gray-50">

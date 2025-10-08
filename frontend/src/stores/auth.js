@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import axios from "axios";
+import axios from "../axios.js";
+import router from "../router/index.js";
 
 export const useAuthStore = defineStore("auth", {
     state: () => ({
@@ -24,7 +25,7 @@ export const useAuthStore = defineStore("auth", {
                 const res = await axios.get('/api/user')
                 this.authUser = res.data
             } catch(error) {
-                if(error.res && error.res.status === 401){
+                if(error.response && error.response.status === 401){
                     this.authUser = null
                 }
             }
@@ -38,7 +39,8 @@ export const useAuthStore = defineStore("auth", {
                     email: data.email,
                     password: data.password
                 });
-                this.router.push("/")
+                await this.getUser();
+                router.push("/")
             } catch(error){
                 this.isLoading = false;
                 if(error.response.status === 422){
@@ -60,7 +62,8 @@ export const useAuthStore = defineStore("auth", {
                     password: data.password,
                     password_confirmation: data.password_confirmation
                 });
-                this.router.push("/");
+                await this.getUser();
+                router.push("/");
             } catch(error){
                 this.isLoading = false;
                 if(error.response.status === 422){
@@ -92,7 +95,7 @@ export const useAuthStore = defineStore("auth", {
             this.authErrors = [];
             try {
                 await axios.post('/reset-password', data);
-                this.router.push('/login')
+                router.push('/login')
             } catch(error) {
                 if(error.response.status === 422){
                     this.authErrors = error.response.data.errors
@@ -102,6 +105,7 @@ export const useAuthStore = defineStore("auth", {
         async logout() {
             await axios.post('/logout');
             this.authUser = null;
+            router.push('/login');
         },
         async editName(data) {
             this.authErrors = [];
