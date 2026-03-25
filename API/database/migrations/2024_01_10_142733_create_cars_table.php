@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('car_category_id')->constrained()->cascadeOnDelete();
             $table->string('registration_number', 100)->unique();
-            $table->string('brand', 50);
+            $table->foreignId('brand_id')->constrained()->cascadeOnDelete();
             $table->string('model', 100);
             $table->string('image', 255);
             $table->integer('mileage');

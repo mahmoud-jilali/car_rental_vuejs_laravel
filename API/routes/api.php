@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\EditInfoController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CarCategoryController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CustomerController;
@@ -17,6 +18,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::apiResource('/car_category', CarCategoryController::class);
+Route::apiResource('/brand', BrandController::class);
 Route::apiResource('/car', CarController::class);
 Route::apiResource('/customer', CustomerController::class);
 Route::apiResource('/fuel_option', FuelOptionController::class);

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Cars;
+namespace App\Http\Requests\Brands;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CarUpdateRequest extends FormRequest
+class BrandsUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,18 +22,9 @@ class CarUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'car_category_id' => 'string',
-            'registration_number' => 'max:100',
-            'brand' => 'max:50',
-            'model' => 'max:100',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'mileage'=> '',
-            'seats' => '',
-            'gearbox' => 'max:25',
-            'price' => '',
+            'logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'name' => 'max:50',
             'description' => '',
-            'fuel_options_id' => 'string',
-            'is_available' => '',
         ];
     }
 }

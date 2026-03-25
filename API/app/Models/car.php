@@ -20,6 +20,11 @@ class car extends Model
         return $this->belongsTo(car_category::class, 'car_category_id');
     }
 
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(brand::class, 'brand_id');
+    }
+
     public function fuel(): BelongsTo
     {
         return $this->belongsTo(fuel_option::class, 'fuel_options_id');
