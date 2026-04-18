@@ -3,10 +3,12 @@ import { RouterLink, RouterView } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faHome, faCar, faList, faAddressCard, faGasPump, faCarBurst, faLocationDot, faFileInvoice, faInfo, faUsers} from '@fortawesome/free-solid-svg-icons'
+import { faHome, faCar, faList, faAddressCard, faGasPump, faCarBurst, 
+   faLocationDot, faFileInvoice, faInfo, faUsers, faLayerGroup} from '@fortawesome/free-solid-svg-icons'
 
 
-library.add(faHome, faCar, faList, faAddressCard, faGasPump, faCarBurst, faLocationDot, faFileInvoice, faInfo, faUsers)
+library.add(faHome, faCar, faList, faAddressCard, faGasPump, faCarBurst, faLocationDot, 
+faFileInvoice, faInfo, faUsers, faLayerGroup)
 
 
 </script>
@@ -74,6 +76,12 @@ library.add(faHome, faCar, faList, faAddressCard, faGasPump, faCarBurst, faLocat
             <RouterLink :to="{name: 'AdminDashboard'}" class="flex items-center p-2 w-auto text-white rounded-l-md hover:bg-white hover:text-blue-500 group">
                <FontAwesomeIcon icon="home" class="mx-2 py-1 cursor-pointer text-black" />
                <span class="ms-3">Dashboard</span>
+            </RouterLink>
+         </li>
+         <li>
+            <RouterLink :to="{name: 'Brands'}" class="flex items-center p-2 w-auto text-white rounded-l-md hover:bg-white hover:text-blue-500 group">
+               <FontAwesomeIcon :icon="faLayerGroup" class="mx-2 py-1 cursor-pointer text-black" />
+               <span class="flex-1 ms-3 whitespace-nowrap">Brands</span>
             </RouterLink>
          </li>
          <li>

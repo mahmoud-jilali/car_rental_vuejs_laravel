@@ -10,6 +10,7 @@ import Locations from '@/pages/Dashboard/Locations/Locations.vue'
 import Rentals from '@/pages/Dashboard/Rentals/Rentals.vue'
 import Services from '@/pages/Dashboard/Services/Services.vue'
 import Users from '@/pages/Dashboard/Users/Users.vue'
+import Brands from '@/pages/Dashboard/Brands/Brands.vue'
 
 const adminRouter = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,14 @@ const adminRouter = createRouter({
       path: '/admin/categories',
       name: 'Categories',
       component: Categories,
+      // meta: {
+      //   requiresAuth: true
+      // }
+    },
+    {
+      path: '/admin/brands',
+      name: 'Brands',
+      component: Brands,
       // meta: {
       //   requiresAuth: true
       // }

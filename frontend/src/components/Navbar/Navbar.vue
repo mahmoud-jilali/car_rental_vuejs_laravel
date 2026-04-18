@@ -6,9 +6,9 @@ import { useAuthStore } from '../../stores/auth'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faUser } from '@fortawesome/free-regular-svg-icons'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faLanguage } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faUser, faChevronDown)
+library.add(faUser, faChevronDown, faLanguage)
 
 const authStore = useAuthStore()
 const dropDown = ref(false);
@@ -30,7 +30,10 @@ onMounted(async() => {
       <!-- <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo"> -->
       <span class="text-blue-600 self-center text-2xl font-semibold whitespace-nowrap">Car Rental</span>
       </RouterLink>
-      <div class="flex mx-7 md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+      <div class="flex mx-7 md:order-2 space-x-3 md:space-x-2 rtl:space-x-reverse">
+        <div class="text-black bg-transparent hover:text-blue-500 font-medium rounded-lg mx-2 py-2 mt-4 text-center">
+          <FontAwesomeIcon :icon="faLanguage" class="text-2xl cursor-pointer" />
+        </div>
         <template v-if="!authStore.user">
           <RouterLink :to="{name: 'login'}" class="text-white bg-blue-500 hover:bg-white hover:text-blue-500 hover:border border-blue-500 font-medium rounded-lg text-sm mx-4 px-4 py-2 mt-4 text-center">Log In</RouterLink>
           <RouterLink  :to="{name: 'register'}" class="text-white bg-black hover:bg-white hover:text-black hover:border border-black font-medium rounded-lg text-sm mx-4 px-4 py-2 mt-4 text-center">Sign Up</RouterLink>

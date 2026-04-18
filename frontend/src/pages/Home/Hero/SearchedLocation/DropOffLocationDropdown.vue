@@ -26,7 +26,7 @@ const handleDropOffLocationClick = (dropOfflocation) => {
 </script>
 
 <template>
-    <div class="absolute z-10 bg-white shadow-lg rounded-lg w-1/4 mt-40">
+    <div class="fixed z-10 bg-white shadow-lg rounded-lg w-1/4 mt-20">
         <ul v-if="locations && locations.length > 0" class="py-2">
             <li v-for="location in locations" :key="location.id" class="flex px-2 py-2 hover:bg-gray-300 cursor-pointer"
             @click="handleDropOffLocationClick(location)">
